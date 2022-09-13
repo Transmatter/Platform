@@ -4,6 +4,7 @@ import ProfileIcon from '@/widget/ProfileIcon.vue';
 import Buttom from '@/widget/Buttom.vue';
 import { onKeyStroke } from '@vueuse/core';
 import { useRouter } from 'vue-router';
+import TTSService from '../service/TTSService';
 
 const router = useRouter();
 const mockLogin = () => {
@@ -31,6 +32,8 @@ onKeyStroke('Control', (e) => {
 
 onKeyStroke('Enter', (e) => {
     document.getElementById('searchButt').click();
+    let query = document.getElementById('searchBox').value;
+    TTSService.getVoice('คุณกำลังค้นหาด้วยคำว่า  ' + query);
 });
 
 onKeyStroke(['z', 'Z'], (e) => {

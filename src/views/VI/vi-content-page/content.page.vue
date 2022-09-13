@@ -83,7 +83,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref,watch } from 'vue';
 import { useViewModel } from './content.viewmodel';
 import NewsDetailsVue from '@/components/NewsDetails.vue';
 import ContentService from './content.service';
@@ -92,11 +92,28 @@ import Nprogress from 'nprogress';
 import SC from '@/service/SpellCorrection.js';
 import TTS from '@/service/TTSService.js';
 import AudioFeedBack from '@/service/AudioFeedBack';
-import { onKeyStroke } from '@vueuse/core';
+import { onKeyStroke, useMagicKeys, useSpeechRecognition } from '@vueuse/core';
 import TTSService from '@/service/TTSService';
+
+const lang = ref('th-TH')
+const {m} = useMagicKeys()
+
+const speech = useSpeechRecognition({
+    lang,
+    continuous: true,
+});
+const {
+    isSupported,
+    isListening,
+    isFinal,
+    result,
+    start,
+    stop,
+} = speech
 
 var page = ref(1);
 var pages = ref(1);
+var query = ref('')
 var size = ref(3);
 var contents = ref([]);
 var totalElements = ref(0);
@@ -123,6 +140,7 @@ var instruction = ref([
     'กดสเปซบาร์เพื่อเปิดโหมดค้นหา',
     'กดเอ็นเทอร์เพื่อค้นหา',
     'กดเอ็กซ์เพื่อเปลี่ยนหมวดหมู่',
+    'กดเอมค้างเพื่อที่จะค้นหาด้วยเสียง เมื่อพูดเสร็จแล้วจึงปล่อยปุ่ม',
     'หลังจากค้นหาแล้วมีคำผิด กด แซก เอ็กซ์ หรือ ซี เพื่อเลือกตัวเลือกตามลำดับ',
 ]);
 var instru_id = ref(0);
@@ -137,9 +155,19 @@ onKeyStroke('ArrowDown', () => {
 });
 onKeyStroke('/', () => {
     TTSService.stopVoice();
-    TTSService.getVoice(instruction.value[instru_id.value%7]);
+    TTSService.getVoice(instruction.value[instru_id.value%8]);
     instru_id.value += 1;
 });
+
+watch(m,async (v)=> {
+    if(v){
+        await TTSService.getVoice("พูดเพื่อค้นหา");
+        await speech.start();
+    }else {
+        speech.stop();
+        query.value = speech.result.value
+    }
+})
 
 const getAllContents = () => {
     Nprogress.start();
