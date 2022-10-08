@@ -83,7 +83,7 @@
 </template>
 
 <script setup>
-import { ref,watch } from 'vue';
+import { ref,watch, onMounted } from 'vue';
 import { useViewModel } from './content.viewmodel';
 import NewsDetailsVue from '@/components/NewsDetails.vue';
 import ContentService from './content.service';
@@ -92,7 +92,7 @@ import Nprogress from 'nprogress';
 import SC from '@/service/SpellCorrection.js';
 import TTS from '@/service/TTSService.js';
 import AudioFeedBack from '@/service/AudioFeedBack';
-import { onKeyStroke, useMagicKeys, useSpeechRecognition } from '@vueuse/core';
+import { onKeyStroke, useMagicKeys, useSpeechRecognition, onKeyDown, onKeyPressed, onKeyUp } from '@vueuse/core';
 import TTSService from '@/service/TTSService';
 
 const lang = ref('th-TH')
@@ -163,16 +163,25 @@ watch(m,async (v)=> {
     if(v){
         await TTSService.getVoice("พูดเพื่อค้นหา");
         await speech.start();
-    }else {
-        speech.stop();
-        query.value = speech.result.value
     }
 })
+
+onKeyUp('m',() => {
+    TTSService.stopVoice();
+    speech.stop();
+    query.value = speech.result.value;
+    console.log('not press m m');
+});
+
+onMounted(()=>{
+    contents.value = getAllContents();
+})
+
 
 const getAllContents = () => {
     Nprogress.start();
     ContentService()
-        .getAllContents(this.page, this.size)
+        .getAllContents(1, 3)
         .then((res) => {
             contents.value = res.data.data.getAllApprovedContent.content;
             totalElements.value = res.data.data.getAllApprovedContent.totalElements;
