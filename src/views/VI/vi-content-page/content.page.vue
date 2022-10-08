@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import { onKeyStroke, useMagicKeys, useSpeechRecognition, onKeyDown, onKeyPressed, onKeyUp } from '@vueuse/core';
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import { useViewModel } from "./content.viewmodel";
 import NewsDetailsVue from "@/components/NewsDetails.vue";
 import ButtomVue from "@/widget/Buttom.vue";
@@ -57,6 +59,34 @@ import TTS from '@/service/TTSService.js'
 import AudioFeedBack from "../../../service/AudioFeedBack";
 import KeyBoardEvent from '../../../components/KeyBoardEvent.vue'
 import TTSService from "../../../service/TTSService";
+
+const lang = ref('th-TH')
+const {m} = useMagicKeys()
+const speech = useSpeechRecognition({
+    lang,
+    continuous: true,
+});
+const {
+    isSupported,
+    isListening,
+    isFinal,
+    result,
+    start,
+    stop,
+} = speech
+
+watch(m,async (v)=> {
+    if(v){
+        await TTSService.getVoice("พูดเพื่อค้นหา");
+        await speech.start();
+    }
+})
+onKeyUp('m',() => {
+    TTSService.stopVoice();
+    speech.stop();
+    document.getElementById("searchBox").value = speech.result.value;
+    console.log('not press m m');
+});
 
 export default {
     name: "Content Page",
@@ -170,6 +200,7 @@ export default {
             }             
         },
         spellChecking(){
+            this.query = document.getElementById("searchBox").value;
             if(this.query.length === 0){
                 TTS.getVoice("กรุณากรอกคำค้นหา")
                 alert("กรุณากรอกคำค้นหา")
