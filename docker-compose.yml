@@ -5,11 +5,11 @@ services:
     image: oat431/platform:latest
     ports:
       - "80:80"
-  frontend-testing:
-    image: oat431/platform:test
-    ports:
-      - "3300:80"
-  frontend-testing-noaudiotest:
-    image: oat431/platform:noaduio
-    ports:
-      - "3330:80"
+  # frontend-testing:
+  #   image: oat431/platform:test
+  #   ports:
+  #     - "3300:80"
+  # frontend-testing-noaudiotest:
+  #   image: oat431/platform:noaduio
+  #   ports:
+  #     - "3330:80"
