@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import { onKeyStroke, useMagicKeys, useSpeechRecognition, onKeyDown, onKeyPressed, onKeyUp } from '@vueuse/core';
-import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
+import { useMagicKeys, useSpeechRecognition, onKeyUp } from '@vueuse/core';
+import { ref, watch } from 'vue'
 import { useViewModel } from "./content.viewmodel";
 import NewsDetailsVue from "@/components/NewsDetails.vue";
 import ButtomVue from "@/widget/Buttom.vue";
@@ -77,7 +77,7 @@ const {
 
 watch(m,async (v)=> {
     if(v){
-        await TTSService.getVoice("พูดเพื่อค้นหา");
+        await AudioFeedBack.getSuccessSearch()
         await speech.start();
     }
 })
