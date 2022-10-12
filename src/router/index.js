@@ -16,6 +16,7 @@ import VIContentPage from '@/views/VI/vi-content-page/content.page.vue';
 import AdminLandingPage from '@/views/admin/admin-landing-page/admin-landing-page.vue';
 import store from '@/store';
 import AudioFeedBack from '../service/AudioFeedBack';
+import TTSService from '@/service/TTSService';
 function checkAuth(to) {
     if (localStorage.user == undefined) {
         return '/';
@@ -23,12 +24,17 @@ function checkAuth(to) {
 }
 
 function checkAdmin(to) {
-  if(localStorage.user == undefined) {
-    return '/';
-  }
-  if(store.getters.getRole !== 'ROLE_SUPER_ADMIN') {
-    return '/admin-home';
-  }
+    if(localStorage.user == undefined) {
+        return '/';
+    }
+    if(store.getters.getRole !== 'ROLE_SUPER_ADMIN') {
+        return '/admin-home';
+    }
+}
+
+function homeReminder(to){
+    TTSService.stopVoice()
+    TTSService.getVoice('คุณอยู่หน้าแรกของเว็บไซต์');
 }
 
 const routes = [
@@ -42,6 +48,7 @@ const routes = [
         path: '/',
         name: 'VIContenPage',
         component: VIContentPage,
+        beforeEnter: [homeReminder],
     },
     {
         path: '/about',

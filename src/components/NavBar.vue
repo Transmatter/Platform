@@ -3,6 +3,7 @@ import LinkButton from '@/widget/LinkButton.vue';
 import ProfileIcon from '@/widget/ProfileIcon.vue';
 import Buttom from '@/widget/Buttom.vue';
 import KeyBoardEvent from './KeyBoardEvent.vue'
+import TTSService from '../service/TTSService';
 export default {
     
     components: {
@@ -44,7 +45,6 @@ export default {
         }else if(keyCode == '38'){
             this.$router.push({ name: "Home" })
         }
-
     }
     } 
 };
