@@ -84,6 +84,7 @@ watch(m,async (v)=> {
 onKeyUp('m',() => {
     TTSService.stopVoice();
     speech.stop();
+    document.getElementById('searchBox').value = '';
     document.getElementById("searchBox").value = speech.result.value;
     console.log('not press m m');
 });
@@ -123,7 +124,7 @@ export default {
             instruction: [
                 "กดลูกศรซ้ายสุดเพื่อเลือกหมวดหมู่ข่าว",
                 "กดลูกศรขวาสุดเพื่อที่จะค้นหาข่าวด้วยคำพูด เมื่อพูดเสร็จแล้วกดอีกทีเพื่อยืนยันคำที่จะค้นหา",
-                "กดลูกศรกลางบนเพื่อบอกว่าคุณอยู่หน้าไหนในเว็บไซต์ และกดอีกทีเพื่อกลับหน้าแรกของเว็บไซต์",
+                "กดลูกศรกลางบนเพื่อบอกว่าคุณอยู่หน้าไหนในเว็บไซต์ หรือ double click เพื่อกลับหน้าแรกของเว็บไซต์",
                 "กดลูกศรกลางล่างเพื่อโหลดข่าวเพิ่มเติม",
                 // "กดเอ็นเทอร์เพื่อค้นหา",
                 // "กดเอ็กซ์เพื่อเปลี่ยนหมวดหมู่",
@@ -308,6 +309,8 @@ export default {
             TTSService.getVoice(this.instruction[this,this.instru_id])
             this.instru_id+=1
         }else if(keyCode == '86'){
+            TTSService.stopVoice();
+            TTSService.stopVoice();
             TTSService.getVoice("คุณอยู่หน้าแรกของเว็บไซต์")
         }
     }

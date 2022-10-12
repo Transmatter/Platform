@@ -166,7 +166,8 @@ export default defineComponent({
         const keyCode = String(e.keyCode || e.code || e.keyIdentifier);
         if(keyCode == '86'){
             TTSService.stopVoice()
-            TTSService.getVoice(`คุณอยู่ที่หน้าข่าว ${this.title} กดอีกครั้งเพื่อกลับไปหน้าแรก`);
+            TTSService.stopVoice()
+            TTSService.getVoice(`คุณอยู่ที่หน้าข่าว ${this.title}`);
         }
     }
     },
