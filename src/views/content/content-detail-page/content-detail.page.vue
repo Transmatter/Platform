@@ -1,4 +1,5 @@
 <template>
+    <KeyBoardEvent v-on:keyup="handleKeyPress"></KeyBoardEvent>
     <div class="lg:mx-64 lg:my-6 lg:px-3 border">
         <div v-if="(this.$store.getters.getRole == 'ROLE_SUPER_ADMIN' || this.$store.getters.getRole == 'ROLE_ADMIN') && this.$store.getters.getStatus == 'VERIFIED'">
             <input class="text-2xl font-bold my-2 py-4 input input-bordered w-full " v-model="title"/>
@@ -82,12 +83,15 @@ import Nprogress from 'nprogress';
 import TTS from '@/service/TTSService';
 import dayjs from 'dayjs'
 import AudioFeed from "../../../service/AudioFeedBack.js";
+import KeyBoardEvent from '../../../components/KeyBoardEvent.vue'
 import 'dayjs/locale/th'
+import TTSService from '@/service/TTSService';
 export default defineComponent({
     name: 'ContentDetailPage',
     components : {
         ButtomVue,
-        ButtomErrorVue
+        ButtomErrorVue,
+        KeyBoardEvent
     },
     data() {
         return {
@@ -157,7 +161,15 @@ export default defineComponent({
             }).catch(error => {
                 console.log(error);
             })
+        },
+        handleKeyPress: function (e){
+        const keyCode = String(e.keyCode || e.code || e.keyIdentifier);
+        if(keyCode == '86'){
+            TTSService.stopVoice()
+            TTSService.stopVoice()
+            TTSService.getVoice(`คุณอยู่ที่หน้าข่าว ${this.title}`);
         }
+    }
     },
     created(){
         ContentDetailSerivce()

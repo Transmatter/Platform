@@ -84,6 +84,7 @@ watch(m,async (v)=> {
 onKeyUp('m',() => {
     TTSService.stopVoice();
     speech.stop();
+    document.getElementById('searchBox').value = '';
     document.getElementById("searchBox").value = speech.result.value;
     console.log('not press m m');
 });
@@ -121,14 +122,13 @@ export default {
             isload: false,
             index : 0 ,
             instruction: [
-            "กดลูกสรขึ้นไปหน้าโฮม",
-            "กดลูกสรซ้ายเพื่อนย้อนหน้ากลับ",
-            "กดลูกสรขวาเพื่อไปหน้าที่ย้อนมา",
-            "กดสเปซบาร์เพื่อเปิดโหมดค้นหา",
-            "กดเอ็นเทอร์เพื่อค้นหา",
-            "กดเอ็กซ์เพื่อเปลี่ยนหมวดหมู่",
-            "หลังจากค้นหาแล้วมีคำผิด กด แซก เอ็กซ์ หรือ ซี เพื่อเลือกตัวเลือกตามลำดับ"
-
+                "กดลูกศรซ้ายสุดเพื่อเลือกหมวดหมู่ข่าว",
+                "กดลูกศรขวาสุดเพื่อที่จะค้นหาข่าวด้วยคำพูด เมื่อพูดเสร็จแล้วกดอีกทีเพื่อยืนยันคำที่จะค้นหา",
+                "กดลูกศรกลางบนเพื่อบอกว่าคุณอยู่หน้าไหนในเว็บไซต์ หรือ double click เพื่อกลับหน้าแรกของเว็บไซต์",
+                "กดลูกศรกลางล่างเพื่อโหลดข่าวเพิ่มเติม",
+                // "กดเอ็นเทอร์เพื่อค้นหา",
+                // "กดเอ็กซ์เพื่อเปลี่ยนหมวดหมู่",
+                // "หลังจากค้นหาแล้วมีคำผิด กด แซก เอ็กซ์ หรือ ซี เพื่อเลือกตัวเลือกตามลำดับ"
             ],
             instru_id:0
         }
@@ -162,6 +162,7 @@ export default {
             });
         },
         searchContent(keyword=this.query){
+            TTSService.getVoice(`คุณกำลังค้นหา ${keyword}`)
             this.size = 3;
             console.log(keyword,this.select);
             Nprogress.start();
@@ -307,6 +308,10 @@ export default {
             }
             TTSService.getVoice(this.instruction[this,this.instru_id])
             this.instru_id+=1
+        }else if(keyCode == '86'){
+            TTSService.stopVoice();
+            TTSService.stopVoice();
+            TTSService.getVoice("คุณอยู่หน้าแรกของเว็บไซต์")
         }
     }
     },
