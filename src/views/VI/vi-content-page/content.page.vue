@@ -162,7 +162,7 @@ export default {
             });
         },
         searchContent(keyword=this.query){
-            TTSService.getVoice(`คุณกำลังค้นหา ${keyword}`)
+            TTS.getVoice(`คุณกำลังค้นหา ${keyword}`)
             this.size = 3;
             console.log(keyword,this.select);
             Nprogress.start();
@@ -207,22 +207,22 @@ export default {
                 alert("กรุณากรอกคำค้นหา")
                 return 
             }
-            SC.checkSpell(this.query)
-            .then((res)=>{
-                if(res.data.suggestion==null){
-                    this.searchContent()
-                }else{
-                    const words = res.data.suggestion
-                    this.suggestion = res.data.suggestion
-                    console.log(words)
-                    TTS.getVoice("คุณหมายถึง "+words[0]+" หรือ "+words[1]+'หรือ ค้นหาด้วยคำของคุณ')
-                }
-            })
-            .catch((err)=>{
-                console.log(err)
-                this.searchContent()
-            })
-            // this.searchContent()
+            // SC.checkSpell(this.query)
+            // .then((res)=>{
+            //     if(res.data.suggestion==null){
+            //         this.searchContent()
+            //     }else{
+            //         const words = res.data.suggestion
+            //         this.suggestion = res.data.suggestion
+            //         console.log(words)
+            //         TTS.getVoice("คุณหมายถึง "+words[0]+" หรือ "+words[1]+'หรือ ค้นหาด้วยคำของคุณ')
+            //     }
+            // })
+            // .catch((err)=>{
+            //     console.log(err)
+            //     this.searchContent()
+            // })
+            this.searchContent(this.query)
         },
         loadselect(){
             this.isload = true;
