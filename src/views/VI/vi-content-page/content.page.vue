@@ -219,7 +219,7 @@ export default {
             })
             .catch((err)=>{
                 console.log(err)
-                // this.searchContent()
+                this.searchContent()
             })
             // this.searchContent()
         },
